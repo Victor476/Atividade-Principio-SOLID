@@ -174,3 +174,121 @@ As interfaces (ou classes abstratas) se tornam o contrato entre as partes.
 As implementações concretas são injetadas (geralmente via injeção de dependência).
 
 O código de alto nível não sabe nem se importa com os detalhes de como algo é feito — ele apenas confia na abstração.
+
+Objetivo do Projeto
+Simular o funcionamento de pedidos em uma lanchonete, permitindo:
+
+Adicionar produtos de diferentes tipos (lanches, bebidas, sobremesas);
+
+Aplicar cupons de desconto (valores fixos ou percentuais);
+
+Emitir recibos de forma flexível (ex: console, arquivo etc.);
+
+Usar boas práticas de design com foco em modularidade, baixo acoplamento e alta coesão.
+
+Estrutura dos Arquivos
+Arquivo	Papel no sistema
+Produto.java	Interface para todos os produtos
+Lanche.java	Implementação de produto tipo lanche
+Bebida.java	Implementação de produto tipo bebida
+Sobremesa.java	Implementação de produto tipo doce
+Cupom.java	Interface para estratégias de desconto
+Pedido.java	Gerencia os itens do pedido e cupons
+EmissorRecibo.java	Interface para diferentes formas de gerar recibo
+
+Explicando Cada Componente
+1. Produto (interface)
+java
+Copiar
+Editar
+public interface Produto {
+    String getNome();
+    double getPreco();
+}
+Contrato comum que todos os itens do cardápio devem seguir.
+
+Promove baixo acoplamento: o sistema não precisa saber o tipo exato do produto, apenas que ele tem um nome e um preço.
+
+2. Lanche, Bebida, Sobremesa
+java
+Copiar
+Editar
+public class Lanche implements Produto { ... }
+public class Bebida implements Produto { ... }
+public class Sobremesa implements Produto { ... }
+Implementam Produto.
+
+Cada classe trata de um tipo específico de item do cardápio.
+
+Aplicam Liskov Substitution Principle (LSP) — qualquer uma pode ser usada como Produto.
+
+Cada uma tem responsabilidade única (SRP): representar seus dados e comportamento básico.
+
+3. Cupom (interface)
+java
+Copiar
+Editar
+public interface Cupom {
+    double aplicarDesconto(double total);
+}
+Abstração de desconto. Serve como estratégia.
+
+Permite ter vários tipos de cupom sem alterar a lógica do pedido (Open-Closed Principle).
+
+Pedido trabalha com a abstração e não com implementação concreta, aplicando Dependency Inversion Principle (DIP).
+
+4. Pedido
+java
+Copiar
+Editar
+public class Pedido {
+    private List<Produto> itens;
+    private Cupom cupom;
+
+    public void adicionarProduto(Produto produto) { ... }
+    public void aplicarCupom(Cupom cupom) { ... }
+    public double calcularTotal() { ... }
+    public List<Produto> getItens() { ... }
+}
+Centraliza a lógica do pedido: gerenciar produtos, aplicar cupom, calcular total.
+
+Tem alta coesão e SRP: não lida com emissão de recibo nem com persistência, apenas com regras do pedido.
+
+Aberto a novos tipos de cupons sem necessidade de alteração (OCP).
+
+Depende apenas de abstrações: Produto e Cupom (DIP).
+
+5. EmissorRecibo
+java
+Copiar
+Editar
+public interface EmissorRecibo {
+    void emitir(Pedido pedido);
+}
+Define uma forma genérica de emitir um recibo.
+
+Cada forma de emissão (console, impressão, PDF etc.) implementa sua própria lógica.
+
+Mantém o sistema extensível sem modificar código existente (OCP).
+
+Permite a substituição de formas de saída sem alterar Pedido, mantendo DIP.
+
+Ciclo de uso do sistema
+Criamos uma instância de Pedido.
+
+Adicionamos produtos ao pedido (lanches, bebidas, etc.).
+
+Aplicamos um Cupom se houver.
+
+Chamamos calcularTotal() para obter o valor final.
+
+Usamos um EmissorRecibo para gerar o recibo.
+
+Qual problema esse sistema resolve?
+Evita classes inchadas e facilita a manutenção.
+
+Permite adicionar novos tipos de produtos, cupons e recibos sem mexer nas classes já existentes.
+
+Favorece a testabilidade e a reusabilidade de código.
+
+Segue uma arquitetura que isola responsabilidades, facilitando mudanças futuras.
