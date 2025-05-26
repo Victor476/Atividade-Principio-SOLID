@@ -29,7 +29,7 @@ Facilita testes unitários, pois cada novo comportamento pode ser testado isolad
 
 Apoia a evolução do sistema sem causar efeitos colaterais indesejados.
 
-#Single Responsibility Principle (SRP) — o Princípio da Responsabilidade Única
+# Single Responsibility Principle (SRP) — o Princípio da Responsabilidade Única
 
 "Uma classe deve ter apenas um único motivo para mudar."
 Ou seja, uma única responsabilidade.
@@ -89,7 +89,7 @@ Liskov Substitution Principle exige hierarquias com comportamentos coesos
 
 Interface Segregation também reforça responsabilidades únicas em interfaces
 
- Interface Segregation Principle (ISP) — o Princípio da Segregação da Interface
+# Interface Segregation Principle (ISP) — o Princípio da Segregação da Interface
 
 Definição formal
 "Uma classe não deve ser forçada a depender de interfaces que ela não utiliza."
